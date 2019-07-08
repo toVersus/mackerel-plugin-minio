@@ -1,6 +1,6 @@
 language: go
 go:
-  - "1.12"
+  - 1.12.x
 env:
   - GO111MODULE=on
 git:
@@ -18,9 +18,11 @@ jobs:
       script: go test -v -race -cover ./...
     - stage: build
       script: go build
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: curl -sL https://git.io/goreleaser | bash
-    on:
-      tags: true
+    - stage: deploy
+      if: tag IS present
+      script: skip
+      deploy: &goreleaser
+        provider: script
+        script: curl -sL https://git.io/goreleaser | bash
+        on:
+          tags: true
