@@ -1,0 +1,26 @@
+language: go
+go:
+  - "1.12"
+env:
+  - GO111MODULE=on
+git:
+  depth: 1
+before_script:
+  - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.13.2
+install: true
+jobs:
+  include:
+    - stage: lint
+      script:
+        - go get -v -t -d ./...
+        - ./bin/golangci-lint run --config .golangci.yml
+    - stage: test
+      script: go test -v -race -cover ./...
+    - stage: build
+      script: go build
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: curl -sL https://git.io/goreleaser | bash
+    on:
+      tags: true

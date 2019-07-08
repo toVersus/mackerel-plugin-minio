@@ -1,0 +1,25 @@
+before:
+  hooks:
+    - go mod download
+builds:
+  - binary: mackerel-plugin-minio
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+changelog:
+  filters:
+    exclude:
+      - .github
+      - Merge pull request
+      - Merge branch
+archive:
+  format: zip
+  name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+  files:
+    - README.md
+release:
+  github:
+    owner: toVersus
+    name: mackerel-plugin-minio
